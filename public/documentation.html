@@ -1,6 +1,338 @@
 <!DOCTYPE html>
 <html lang="en">
-<h1>myFlix</h1>
-<p>This project is to build a server-side component of a movies web application</p>
+	<head>
+		<title>myFlix API Documentation</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+    	<link rel="shortcut icon" href="img/myflix-favicon.png" type="image/x-icon" />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css"
+			integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/style.css">
+	</head>
+
+	<body>
+		<header>
+			<div class="background-blur">
+				<nav>
+					<img src="img/myflix-logo-1.png" alt="myFlix logo">
+				</nav>
+			</div>
+			<div class="page-title">
+				<p>API Documentation</p>
+				<div class="top-bar">
+					<nav>
+						<ul>
+							<li>
+								<a href="#introduction">Introduction</a>
+							</li>
+							<li>
+								<a href="#api-endponts">API Endpoints</a>
+							</li>
+							<li>
+								<a href="#resource-parameters">Resource Parameters</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+		<main>
+			<div class="side-bar">
+				<nav>
+					<ul>
+						<li><a href="#introduction">Introduction</a></li>
+						<li><a href="#api-endponts">API Endpoints</a></li>
+						<li><a href="#resource-parameters">Resource Parameters</a></li>
+					</ul>
+				</nav>
+			</div>
+			<section class="content-container">
+				<div id="introduction">
+					<h1>Introduction</h1>
+					<p>This project aims to build a server-side component for a movies web application. This API helps frontend developers to create functional movie UI for users to read information about different movies and even have a list of their favorite movies. </p>
+				</div>
+			<div id="api-endpoints">
+				<h1>API Endpoints</h1>
+				<p>This table below provides a list of all current API endpoints with their corresponding description, call URL, HTTP method, data request format, data response format and example responses. This list will continue to be updated as further endpoints are added.</p>
+			</div>
+			<table class="api-table" cellpadding="10">
+				<thead>
+					<tr class="api-table-header">
+						<th>Description</th>
+						<th>Call URL</th>
+						<th>HTTP Method</th>
+						<th>Data Request Format</th>
+						<th>Data Response Format</th>
+						<th>Example Response</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="odd">
+						<td>Returns list of all movies to user</td>
+						<td><code>/movies</code></td>
+						<td>GET</td>
+						<td>Example URL Format: <br>
+							<code>http://localhost:8080/movies</code><br>
+							<br></td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+	title: "movie title",
+	Author: "movie author",
+	Description: "movie description",
+	Genre: {
+		Name: "genreName",
+		Description: "genreDescription",
+	},
+	Director: {
+		Name: "directorName",
+		Bio: "directorBio",
+	},
+	ImageUrl: "movieImage",
+	Featured: false,
+}
+								</pre>
+							</code>
+						</td>
+					</tr>
+					<!-- Get genre names-->
+					<tr class="even">
+						<td>Returns list of all movies genre to users</td>
+						<td><code>/movies/genre/:genreName</code></td>
+						<td>GET</td>
+						<td>Example URL Format: <br>
+							<code>http://localhost:8080/movies/genre/Fantacy</code><br>
+							<br></td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+	Genre: {
+		Name: "genreName",
+		Description: "genreDescription",
+	},
+}
+								</pre>
+							</code>
+						</td>
+					</tr>
+					<!-- Get director names-->
+					<tr class="odd">
+						<td>Returns list of all movie directors to users</td>
+						<td><code>/movies/director/:directorName</code></td>
+						<td>GET</td>
+						<td>Example URL Format: <br>
+							<code>http://localhost:8080/movies/director/J.K.%20Rowling</code><br>
+							<br></td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+
+	Director: {
+		Name: "directorName",
+		Bio: "directorBio",
+	},
+}
+								</pre>
+							</code>
+						</td>
+					</tr>
+
+					<!-- User registration-->
+					<tr class="even">
+						<td>Allows users to register</td>
+						<td><code>/users</code></td>
+						<td>POST</td>
+						<td>
+							Example URL Format: <br>
+							<code>http://localhost:8080/users</code>
+							<br><br>
+							<p>The JSON format below will be in the body of the POST HTTP request</p>
+							<code>
+								<pre>
+{
+	"name": "Joel",
+	"favoriteMovies": "Ready Player One"
+}
+								</pre>
+							</code>
+						</td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+    "name": "Joel",
+    "favoriteMovies": "Ready Player One",
+    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+}
+
+								</pre>
+							</code>
+						</td>
+					</tr>
+					<!-- Update user information-->
+					<tr class="odd">
+						<td>Allows users to update information</td>
+						<td><code>/users/:id</code></td>
+						<td>PUT</td>
+						<td>
+							Example URL Format: <br>
+							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9</code><br>
+							<br>
+							<p>The JSON format below will be in the body of the PUT HTTP request</p>
+							<code>
+								<pre>
+{
+    "name": "Joel Casey",
+    "favoriteMovies": "Ready Player One",
+    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+}
+								</pre>
+							</code>
+						</td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+    "name": "Joel Casey",
+    "favoriteMovies": "Ready Player One",
+    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+}
+								</pre>
+							</code>
+						</td>
+					</tr>
+					<!-- Update favorite movies-->
+					<tr class="even">
+						<td>Allows users to update favorite movies</td>
+						<td><code>/users/:id/:movieTitle</code></td>
+						<td>POST</td>
+						<td>
+							Example URL Format: <br>
+							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9/Spirit</code><br>
+							<br>
+						</td>
+						<td>
+							JSON
+						</td>
+						<td>
+							<code>
+								<pre>
+{
+    "name": "Joel Casey",
+    "favoriteMovies": "Spirit",
+    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+}
+								</pre>
+							</code>
+						</td>
+					</tr>
+					<!-- Delete favorite movies-->
+					<tr class="odd">
+						<td>Allows users to delete favorite movies</td>
+						<td><code>/users/:id/:movieTitle</code></td>
+						<td>DELETE</td>
+						<td>
+							Example URL Format: <br>
+							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9/Spirit</code><br>
+							<br>
+						</td>
+						<td>
+							TEXT
+						</td>
+						<td>
+							<code>
+								{movieTitle} has been removed from your favorite movies list
+							</code>
+						</td>
+					</tr>
+					<!-- Deregister users-->
+					<tr class="even">
+						<td>Allows users to deregister</td>
+						<td><code>/users/:id</code></td>
+						<td>DELETE</td>
+						<td>
+							Example URL Format: <br>
+							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9</code><br>
+							<br>
+						</td>
+						<td>
+							TEXT
+						</td>
+						<td>
+							<code>
+								user with ID {id} has been deleted
+							</code>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div id="resource-parameters">
+				<h1>Resource Parameters</h1>
+				<code>http://localhost:8080/movies</code>
+				<table class="api-table" cellpadding="10">
+					<thead>
+						<tr class="api-table-header">
+							<th>Parameters</th>
+							<th>Description</th>
+							<th>Type</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="odd">
+							<td><code>:movieTitle</code></td>
+							<td>
+								<p>This represents the movie title</p>
+							</td>
+							<td><pre>string</pre></td>
+						</tr>
+						<tr class="even">
+							<td><code>:genreName</code></td>
+							<td>
+								<p>This represents the movie genre</p>
+							</td>
+							<td><pre>string</pre></td>
+						</tr>
+						<tr class="even">
+							<td><code>:directorName</code></td>
+							<td>
+								<p>This represents the movie director name </p>
+							</td>
+							<td><pre>string</pre></td>
+						</tr>
+						<tr class="odd">
+							<td><code>:id</code></td>
+							<td>
+								<p>This represents a unique identifier of a user and is assigned at registration of a new user </p>
+							</td>
+							<td><pre>string</pre></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			</section>
+		</main>
+		<footer>
+		</footer>
+	</body>
 
 </html>
