@@ -84,18 +84,17 @@
 								<pre>
 {
 	title: "movie title",
-	Author: "movie author",
-	Description: "movie description",
-	Genre: {
-		Name: "genreName",
-		Description: "genreDescription",
+	description: "movie description",
+	genre: {
+		name: "genreName",
+		description: "genreDescription",
 	},
-	Director: {
-		Name: "directorName",
-		Bio: "directorBio",
+	director: {
+		name: "directorName",
+		bio: "directorBio",
 	},
-	ImageUrl: "movieImage",
-	Featured: false,
+	image_path: "movieImage",
+	featured: false,
 }
 								</pre>
 							</code>
@@ -103,7 +102,7 @@
 					</tr>
 					<!-- Get genre names-->
 					<tr class="even">
-						<td>Returns list of all movies genre to users</td>
+						<td>Returns list of all movies by genre to users</td>
 						<td><code>/movies/genre/:genreName</code></td>
 						<td>GET</td>
 						<td>Example URL Format: <br>
@@ -116,10 +115,20 @@
 							<code>
 								<pre>
 {
-	Genre: {
-		Name: "genreName",
-		Description: "genreDescription",
+	"genre": {
+		"name": "Sci-Fi",
+		"description": "genreDescription"
 	},
+	"director": {
+		"name": "Christopher Nolan",
+		"bio": "directorBio",
+		"birth_date": "1970-07-30T00:00:00.000Z"
+	},
+	"_id": "645108fc3cfc34eff0b0ff18",
+	"title": "Interstellar",
+	"description": "movieDescription",
+	"image_path": "https://www.example.com/interstellar.jpg",
+	"featured": true
 }
 								</pre>
 							</code>
@@ -127,7 +136,7 @@
 					</tr>
 					<!-- Get director names-->
 					<tr class="odd">
-						<td>Returns list of all movie directors to users</td>
+						<td>Returns details of a specified director and the movies they directed</td>
 						<td><code>/movies/director/:directorName</code></td>
 						<td>GET</td>
 						<td>Example URL Format: <br>
@@ -141,9 +150,9 @@
 								<pre>
 {
 
-	Director: {
-		Name: "directorName",
-		Bio: "directorBio",
+	director: {
+		name: "directorName",
+		bio: "directorBio",
 	},
 }
 								</pre>
@@ -164,8 +173,10 @@
 							<code>
 								<pre>
 {
-	"name": "Joel",
-	"favoriteMovies": "Ready Player One"
+    "username": "testuser1",
+    "password": "testuserpassword",
+    "email": "testuser@email.com",
+    "birth_date": "1997-03-01"
 }
 								</pre>
 							</code>
@@ -174,14 +185,19 @@
 							JSON
 						</td>
 						<td>
+							Returns the updated user information in JSON.<br>
+							<br>
 							<code>
 								<pre>
 {
-    "name": "Joel",
-    "favoriteMovies": "Ready Player One",
-    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+    "_id": "64540c43fe4b3d3bf56a7578",
+    "username": "testuser1",
+    "password": "testuserpassword",
+    "email": "testuser@email.com",
+    "birth_date": "1997-03-01T00:00:00.000Z",
+    "favorite_movies": [],
+    "__v": 0
 }
-
 								</pre>
 							</code>
 						</td>
@@ -189,7 +205,7 @@
 					<!-- Update user information-->
 					<tr class="odd">
 						<td>Allows users to update information</td>
-						<td><code>/users/:id</code></td>
+						<td><code>/users/:username</code></td>
 						<td>PUT</td>
 						<td>
 							Example URL Format: <br>
@@ -199,9 +215,10 @@
 							<code>
 								<pre>
 {
-    "name": "Joel Casey",
-    "favoriteMovies": "Ready Player One",
-    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+	"name": "Joel Casey",
+	"password": "Ready Player One",
+	"email": "testpassword001",
+	"birth_date": "2001-01-01"
 }
 								</pre>
 							</code>
@@ -210,12 +227,18 @@
 							JSON
 						</td>
 						<td>
+							Returns the updated user information in JSON.<br>
+							<br>
 							<code>
 								<pre>
 {
-    "name": "Joel Casey",
-    "favoriteMovies": "Ready Player One",
-    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+    "_id": "64540c43fe4b3d3bf56a7578",
+    "username": "testuser1",
+    "password": "testuserpasswordupdated01",
+    "email": "testuser@email.com",
+    "birth_date": "1997-03-01T00:00:00.000Z",
+    "favorite_movies": [],
+    "__v": 0
 }
 								</pre>
 							</code>
@@ -224,23 +247,32 @@
 					<!-- Update favorite movies-->
 					<tr class="even">
 						<td>Allows users to update favorite movies</td>
-						<td><code>/users/:id/:movieTitle</code></td>
+						<td><code>/users/:username/:movieId</code></td>
 						<td>POST</td>
 						<td>
 							Example URL Format: <br>
-							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9/Spirit</code><br>
+							<code>http://localhost:8080/users/testuser1/645108fc3cfc34eff0b0ff18</code><br>
 							<br>
 						</td>
 						<td>
 							JSON
 						</td>
 						<td>
+							Returns the updated user information in JSON.<br>
+							<br>
 							<code>
 								<pre>
 {
-    "name": "Joel Casey",
-    "favoriteMovies": "Spirit",
-    "id": "ab55948b-dd77-4aa8-a9e2-ca4879d08bc9"
+    "_id": "64540c43fe4b3d3bf56a7578",
+    "username": "testuser1",
+    "password": "testuserpasswordupdated01",
+    "email": "testuser@email.com",
+    "birth_date": "1997-03-01T00:00:00.000Z",
+    "favorite_movies": [
+        "645108fc3cfc34eff0b0ff18",
+        "645108fc3cfc34eff0b0ff13"
+    ],
+    "__v": 0
 }
 								</pre>
 							</code>
@@ -249,30 +281,44 @@
 					<!-- Delete favorite movies-->
 					<tr class="odd">
 						<td>Allows users to delete favorite movies</td>
-						<td><code>/users/:id/:movieTitle</code></td>
+						<td><code>/users/:username/:movieId</code></td>
 						<td>DELETE</td>
 						<td>
 							Example URL Format: <br>
-							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9/Spirit</code><br>
+							<code>http://localhost:8080/users/testuser1/645108fc3cfc34eff0b0ff18</code><br>
 							<br>
 						</td>
 						<td>
-							TEXT
+							JSON
 						</td>
 						<td>
+							Returns the updated user information in JSON with the deleted favorite movie removed from database.<br>
+							<br>
 							<code>
-								{movieTitle} has been removed from your favorite movies list
+								<pre>
+{
+    "_id": "64540c43fe4b3d3bf56a7578",
+    "username": "testuser1",
+    "password": "testuserpasswordupdated01",
+    "email": "testuser@email.com",
+    "birth_date": "1997-03-01T00:00:00.000Z",
+    "favorite_movies": [
+        "645108fc3cfc34eff0b0ff13"
+    ],
+    "__v": 0
+}
+								</pre>
 							</code>
 						</td>
 					</tr>
 					<!-- Deregister users-->
 					<tr class="even">
 						<td>Allows users to deregister</td>
-						<td><code>/users/:id</code></td>
+						<td><code>/users/:username</code></td>
 						<td>DELETE</td>
 						<td>
 							Example URL Format: <br>
-							<code>http://localhost:8080/users/ab55948b-dd77-4aa8-a9e2-ca4879d08bc9</code><br>
+							<code>http://localhost:8080/users/testuser1</code><br>
 							<br>
 						</td>
 						<td>
@@ -280,7 +326,7 @@
 						</td>
 						<td>
 							<code>
-								user with ID {id} has been deleted
+								'username' has been deleted
 							</code>
 						</td>
 					</tr>
@@ -323,6 +369,13 @@
 							<td><code>:id</code></td>
 							<td>
 								<p>This represents a unique identifier of a user and is assigned at registration of a new user </p>
+							</td>
+							<td><pre>string</pre></td>
+						</tr>
+						<tr class="even">
+							<td><code>:username</code></td>
+							<td>
+								<p>This represents a unique name registered by the user during registration </p>
 							</td>
 							<td><pre>string</pre></td>
 						</tr>
