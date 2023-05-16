@@ -3,6 +3,22 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+const cors = require("cors");
+let allowedOrigins = [];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        let message =
+          "The CORS policy for this application does not allow access from origin " +
+          origin;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  })
+);
 let auth = require("./auth.js")(app);
 const passport = require("passport");
 require("./passport");
@@ -10,6 +26,7 @@ const morgan = require("morgan");
 const fs = require("fs");
 const path = require("path");
 const uuid = require("uuid");
+const { check, validationResult } = require("express-validator");
 
 // connecting to business model and database
 const mongoose = require("mongoose");
@@ -94,8 +111,21 @@ app.get(
 // allow users to register
 app.post(
   "/users",
+  [
+    check(
+      "username",
+      "Username contains non alpanumeric charachters - not allowed"
+    ).isAlphanumeric(),
+    check("password", "Password is required").not().isEmpty(),
+    check("email", "Email does not appear to be valid").isEmail(),
+  ],
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    let errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+    let hashPassword = users.hashPassword(req.body.password);
     users
       .findOne({ username: req.body.username })
       .then((user) => {
@@ -105,7 +135,7 @@ app.post(
           users
             .create({
               username: req.body.username,
-              password: req.body.password,
+              password: hashPassword,
               email: req.body.email,
               birth_date: req.body.birth_date,
             })
@@ -128,6 +158,12 @@ app.post(
 // allow users to update user info
 app.put(
   "/users/:username",
+  [
+    check(
+      "username",
+      "Username contains non alpanumeric charachters - not allowed"
+    ).isAlphanumeric(),
+  ],
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     users
@@ -156,6 +192,12 @@ app.put(
 // allow user to update favorite movies
 app.post(
   "/users/:username/:movieId",
+  [
+    check(
+      "username",
+      "Username contains non alpanumeric charachters - not allowed"
+    ).isAlphanumeric(),
+  ],
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     users
@@ -230,6 +272,7 @@ app.use((err, req, res, next) => {
   next();
 });
 
-app.listen(8080, () => {
-  console.log("Listening on port 8080");
+const port = process.env.PORT || 8080;
+app.listen(port, "0.0.0.0", () => {
+  console.log("Listening on port " + [port]);
 });
