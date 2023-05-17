@@ -258,9 +258,12 @@ app.delete(
   }
 );
 
-app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
-  res.send("This is myFlix API");
-});
+app.get(
+  "/",
+  /*passport.authenticate("jwt", { session: false }),*/ (req, res) => {
+    res.send("This is myFlix API");
+  }
+);
 
 // routes all requests for static files to their corresponding files in the public folder
 app.use(express.static("public"));
