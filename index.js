@@ -34,10 +34,20 @@ const models = require("./model.js");
 const { error } = require("console");
 const movies = models.movie;
 const users = models.user;
+/*
 mongoose.connect("mongodb://localhost:27017/myFlixDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+*/
+
+mongoose.connect(
+  process.env.CONNECTION_URI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 const serverLog = fs.createWriteStream(path.join(__dirname, "log.txt"), {
   flags: "a",
