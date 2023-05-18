@@ -4,7 +4,8 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const cors = require("cors");
-let allowedOrigins = [];
+app.use(cors());
+//let allowedOrigins = [];
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -268,7 +269,7 @@ app.delete(
   }
 );
 
-app.get("/", passport.authenticate("jwt", { session: false }), (req, res) => {
+app.get("/", (req, res) => {
   res.send("This is myFlix API");
 });
 
