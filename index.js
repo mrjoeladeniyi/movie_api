@@ -37,13 +37,15 @@ const models = require("./model.js");
 const { error } = require("console");
 const movies = models.movie;
 const users = models.user;
-/*
-mongoose.connect("mongodb://localhost:27017/myFlixDB", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-*/
 
+// // connect to mongoose_local
+// mongoose.connect("mongodb://localhost:27017/myFlixDB", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
+
+
+// connect to mongoose_global
 mongoose.connect(
   process.env.CONNECTION_URI,
   {
@@ -121,6 +123,23 @@ app.get(
   }
 );
 
+// return user by username
+app.get(
+  "/users/:userName",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    users
+      .find({ username: req.params.userName })
+      .then((user) => {
+        res.json(user);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send("Error: " + err);
+      });
+  }
+);
+
 // allow users to register
 app.post(
   "/users",
@@ -132,7 +151,6 @@ app.post(
     check("password", "Password is required").not().isEmpty(),
     check("email", "Email does not appear to be valid").isEmail(),
   ],
-  passport.authenticate("jwt", { session: false }),
   (req, res) => {
     let errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -179,13 +197,14 @@ app.put(
   ],
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
+    let hashPassword = users.hashPassword(req.body.password);
     users
       .findOneAndUpdate(
         { username: req.params.username },
         {
           $set: {
             username: req.body.username,
-            password: req.body.password,
+            password: hashPassword,
             email: req.body.email,
             birth_date: req.body.birth_date,
           },
