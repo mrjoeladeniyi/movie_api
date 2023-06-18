@@ -64,11 +64,21 @@ app.use(morgan("combined", { stream: serverLog }));
 // logs connections and requests to terminal
 app.use(morgan("common"));
 
+// return all movies
 app.get(
   "/movies",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     movies.find().then((movies) => res.json(movies));
+  }
+);
+
+// return all users
+app.get(
+  "/users",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    users.find().then((users) => res.json(users));
   }
 );
 
