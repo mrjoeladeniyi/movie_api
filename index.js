@@ -38,14 +38,13 @@ const { error } = require("console");
 const movies = models.movie;
 const users = models.user;
 
-// // connect to mongoose_local
+//* connect to mongoose_local
 // mongoose.connect("mongodb://localhost:27017/myFlixDB", {
 //   useNewUrlParser: true,
 //   useUnifiedTopology: true,
 // });
 
-
-// connect to mongoose_global
+//* connect to mongoose_global
 mongoose.connect(
   process.env.CONNECTION_URI,
   {
@@ -208,6 +207,8 @@ app.put(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     let hashPassword = users.hashPassword(req.body.password);
+    console.log(req.body);
+    console.log(req.params);
     users
       .findOneAndUpdate(
         { username: req.params.username },
